@@ -67,6 +67,15 @@ class AuthorListView(generic.ListView):
 class BookListView(generic.ListView):
     model = Book
     paginate_by = 10
+   # # wersja dla 5 najbardziej " poczytnych" ksiazek
+   # model = Book
+   # context_object_name = 'book_list'   # your own name for the list as a template variable
+   # queryset = Book.objects.filter(title__icontains='war')[:5] # Get 5 books containing the title war
+   # template_name = 'books/my_arbitrary_template_name_list.html'  # Specify your own template name/location < - w ten sposób można podać lokalizację templatki
+   
+   # inna opcja
+   #  def get_queryset(self):
+   #      return Book.objects.filter(title__icontains='war')[:5] # Get 5 books containing the title war
 
 class BookDetailView(generic.DetailView):
     model = Book
