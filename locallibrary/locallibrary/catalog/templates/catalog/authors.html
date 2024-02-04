@@ -1,0 +1,24 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Here are our authors and their books</h1>
+  <p>
+    and how I done it.
+    {% comment %} <em>Mozilla Developer Network</em>! {% endcomment %}
+  </p>
+  <h2>Dynamic content</h2>
+  <p>The library has books of the following authors:</p>
+  <ul>
+    <li><strong>Number of Authors in the library:</strong> {{ num_authors}}</li>
+    <li><strong>Name of Authors:</strong> {{ name_of_authors }}</li>
+    <li><strong>Authors and books</strong> {{ author_and_books}}</li>
+    {% comment %} <li><strong>Authors and genere of their books:</strong> {{ genre_type }}</li> {% endcomment %}
+    {% comment %} <li><a href="{% url 'index' %}">Home</a></li>  {% comment %} odsyła do głównej strony {% endcomment %} 
+    {% load static %}
+    {% comment %} <img
+      src="{% static 'catalog/images/local_library_model_uml.png' %}"
+      alt="UML diagram"
+      style="width:555px;height:540px;" /> {% endcomment %}
+    
+  </ul>
+{% endblock %}
