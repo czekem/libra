@@ -3,7 +3,8 @@ from django.http import HttpResponse
 from .models import Book, BookInstance, Author, Authorship, Genre, Language
 from django.db.models import Count, Min
 from django.views import generic
-
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.views import View
 
 def index(request):
    
@@ -64,19 +65,36 @@ class AuthorListView(generic.ListView):
     
     paginate_by = 10
 
+
 class BookListView(generic.ListView):
     model = Book
     paginate_by = 10
-   # # wersja dla 5 najbardziej " poczytnych" ksiazek
-   # model = Book
-   # context_object_name = 'book_list'   # your own name for the list as a template variable
-   # queryset = Book.objects.filter(title__icontains='war')[:5] # Get 5 books containing the title war
-   # template_name = 'books/my_arbitrary_template_name_list.html'  # Specify your own template name/location < - w ten sposób można podać lokalizację templatki
-   
-   # inna opcja
-   #  def get_queryset(self):
-   #      return Book.objects.filter(title__icontains='war')[:5] # Get 5 books containing the title war
+
 
 class BookDetailView(generic.DetailView):
     model = Book
+
+class LoanedBooksByUserListView(LoginRequiredMixin, generic.ListView):
+    """Generic class-based view listing books on loan to the current user."""
+    model = BookInstance
+    template_name = 'catalog/bookinstance_list_borrowed_user.html'
+    paginate_by = 4
+    
+    def get_queryset(self):
+        return (
+            BookInstance.objects.filter(borrower=self.request.user).filter(status__exact='o').order_by('due_back')
+        )
+
+
+    
+    def get_queryset(self):
+        return BookInstance.objects.filter(status__exact='o').order_by('due_back')
+
+class Myview(LoginRequiredMixin, View):
+    login_url = '/login/'
+    redirect_field_name = 'redirect_to'
+
+class MyView(PermissionRequiredMixin, View):
+    permission_required = "catalog.can_mark_returned"
+    permission_required = ('catalog.can_mark_returned', 'catalog.change_book')
     
