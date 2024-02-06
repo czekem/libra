@@ -1,0 +1,16 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<p>Logged out!</p>  
+
+<a href="{% url 'login'%}">Click here to login again.</a>
+{% endblock %}
+
+
+<form method="post" action="{% url 'logout' %}">
+  {% csrf_token %}
+  <button type="submit">Log Out</button>
+</form>
+
+
+{% comment %} zmiana sposobu logowania : https://learndjango.com/tutorials/django-login-and-logout-tutorial  {% endcomment %}
